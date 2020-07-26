@@ -1,0 +1,314 @@
+--- a/config.def.h	2020-07-25 23:32:42.751674025 +0200
++++ b/config.def.h	2020-07-26 15:16:58.891432802 +0200
+@@ -1,26 +1,128 @@
++#ifdef PERSONAL
++#include <X11/XF86keysym.h>
++#endif
++
+ /* See LICENSE file for copyright and license details. */
+ 
+ /* appearance */
++#ifdef VANITYGAPS
++static const unsigned int gappih    = 18;       /* horiz inner gap between windows */
++static const unsigned int gappiv    = 18;       /* vert inner gap between windows */
++static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
++static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
++static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
++#endif
++#ifdef PERSONAL
++static const unsigned int borderpx  = 2;        /* border pixel of windows */
++#else
+ static const unsigned int borderpx  = 1;        /* border pixel of windows */
++#endif
++#ifdef ROUNDEDCORNERS
++static const int cornerradius 	    = 10; 
++#endif
+ static const unsigned int snap      = 32;       /* snap pixel */
++#ifdef SYSTRAY
++static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
++static const unsigned int systrayspacing = 2;   /* systray spacing */
++static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
++static const int showsystray        = 1;     /* 0 means no systray */
++#endif
+ static const int showbar            = 1;        /* 0 means no bar */
+ static const int topbar             = 1;        /* 0 means bottom bar */
++#ifdef PERSONAL
++static const char *fonts[]          = { "Iosevka Nerd Font:size=12:style=heavy" };
++static const char buttonbar[]       = "懶 ";
++#else
+ static const char *fonts[]          = { "monospace:size=10" };
++#endif
+ static const char dmenufont[]       = "monospace:size=10";
++#ifdef PERSONAL
++static const char col_gray1[]       = "#222222";
++static const char col_gray2[]       = "#444444";
++static const char col_gray3[]       = "#faebd7";
++static const char col_black[]       = "#000000";
++static const char col_border[]      = "#ff79c6";
++static const char col_cyan[]        = "#005577";
++static const char col_red[]         = "#ff5555";
++static const char col_yellow[]      = "#ffff00";
++static const char col_smthFG[]      = "#f5fffa";
++static const char col_SeparatorBG[] = "#707070";
++static const char col_BGgreen[]     = "#008000";
++static const char col_smth[]        = "#eee5de";
++#else
+ static const char col_gray1[]       = "#222222";
+ static const char col_gray2[]       = "#444444";
+ static const char col_gray3[]       = "#bbbbbb";
+ static const char col_gray4[]       = "#eeeeee";
+ static const char col_cyan[]        = "#005577";
++#endif
++
+ static const char *colors[][3]      = {
+-	/*               fg         bg         border   */
++	/*               			fg         bg         		border   */
++	#ifdef PERSONAL
++	[SchemeNorm] 		=	 { col_gray3,     col_gray1,  		col_black },
++	[SchemeSel]  		=	 { col_black,	  col_border,		col_border },
++	[SchemeWarn]   		=	 { col_black,     col_yellow, 		col_red },
++	[SchemeUrgent]		=	 { col_smthFG, 	  col_red,    		col_red },
++	[SchemeTagUnderline] 	=	 { col_border,    col_border,   	col_border },
++	[SchemeBGgreen] 	=	 { col_gray3,  	  col_BGgreen,		col_gray2 },
++	[SchemeWnameBG] 	=	 { col_border, 	  col_gray1,		col_red },
++	[SchemeBlockSeparator] 	=	 { col_cyan,      col_SeparatorBG,	col_red },
++	[SchemeCmusButton] 	=	 { col_smth,	  col_cyan,		col_red },
++	#else
+ 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+ 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
++	#endif
+ };
+ 
+ /* tagging */
++//static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
++//static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
+ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
++//static const char *tags[] = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" };
+ 
++#if defined(PERSONAL) && defined(CENTER)
++static const Rule rules[] = {
++	/* xprop(1):
++	 *	WM_CLASS(STRING) = instance, class
++	 *	WM_NAME(STRING) = title
++	 */
++	/* class      		instance    title       tags mask     iscentered	isfloating   monitor */
++	{ "Gimp",     		NULL,       NULL,       0,            1,		1,           -1 },
++	{ "Firefox",  		NULL,       NULL,       1 << 2,       0,		0,           -1 },
++	{ "mpv",      		NULL,       NULL,       0,            1,		1,           -1 },
++	{ "feh",      		NULL,       NULL,       0,            1,		1,           -1 },
++	{ "Sxiv",      		NULL,       NULL,       0,            1,		1,           -1 },	
++	{ "Kodi",     		NULL,       NULL,       1 << 7,       0,		0,           -1 },
++	{ "Steam",    		NULL,       NULL,       1 << 4,       1,		0,           -1 },
++	{ "QtCreator",  	NULL,       NULL,       1 << 3,       1,		0,           -1 },
++	{ "KeePassXC",  	NULL,       NULL,       0,            1,		1,           -1 },
++	{ "Galculator",      	NULL,       NULL,       0,            1,		1,           -1 },
++	{ "VirtualBox",      	NULL,       NULL,       0,            1,		0,           -1 },
++	{ "Gcolor2",      	NULL,       NULL,       0,            1,		1,           -1 },
++};
++#elif defined(PERSONAL)
++static const Rule rules[] = {
++	{ "Gimp",     		NULL,       NULL,       0,            1,           -1 },
++	{ "Firefox",  		NULL,       NULL,       1 << 2,       0,           -1 },
++	{ "mpv",      		NULL,       NULL,       0,            1,           -1 },
++	{ "feh",      		NULL,       NULL,       0,            1,           -1 },
++	{ "Sxiv",      		NULL,       NULL,       0,            1,           -1 },	
++	{ "Kodi",     		NULL,       NULL,       1 << 7,       0,           -1 },
++	{ "Steam",    		NULL,       NULL,       1 << 4,       1,           -1 },
++	{ "QtCreator",  	NULL,       NULL,       1 << 3,       1,           -1 },
++	{ "KeePassXC",  	NULL,       NULL,       0,            1,           -1 },
++	{ "Galculator",      	NULL,       NULL,       0,            1,           -1 },
++	{ "VirtualBox",      	NULL,       NULL,       0,            1,           -1 },
++	{ "Gcolor2",      	NULL,       NULL,       0,            1,           -1 },
++};
++#elif defined(CENTER) && ! defined(PERSONAL)
++static const Rule rules[] = {
++	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
++	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
++	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
++};
++#else
+ static const Rule rules[] = {
+ 	/* xprop(1):
+ 	 *	WM_CLASS(STRING) = instance, class
+@@ -30,9 +132,14 @@
+ 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+ 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+ };
++#endif
+ 
+ /* layout(s) */
++#ifdef PERSONAL
++static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
++#else
+ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
++#endif
+ static const int nmaster     = 1;    /* number of clients in master area */
+ static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+ 
+@@ -44,7 +151,7 @@
+ };
+ 
+ /* key definitions */
+-#define MODKEY Mod1Mask
++#define MODKEY Mod4Mask
+ #define TAGKEYS(KEY,TAG) \
+ 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+@@ -56,60 +163,118 @@
+ 
+ /* commands */
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
++static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray3, NULL };
+ static const char *termcmd[]  = { "st", NULL };
+ 
++#ifdef PERSONAL
++static const char *roficmd[] = { "rofi", "-modi", "drun", "-show", "drun", "-show-icons", NULL };
++static const char *roficmdtasks[] = { "rofi", "-theme", "solarized_alternate", "-i", "-show", "window", NULL };
++static const char *upvol[] = { "audio-change-volume-up", NULL };
++static const char *downvol[] = { "audio-change-volume-down", NULL };
++static const char *kodi[] = { "kodi", NULL };
++static const char *firefox[] = { "firefox", NULL };
++static const char *cmusstart[] = { "cmus-remote", "-p", NULL };
++static const char *cmusstop[] = { "cmus-remote", "-s", NULL };
++static const char *screenshotfull[] = { "TakeScreenshot-Full.sh", NULL };
++static const char *screenshotgrab[] = { "TakeScreenshot-Grab.sh", NULL };
++static const char *reboot[] = { "Reboot-machine.sh", NULL };
++static const char *showDateTimeWeather[] = { "dateTimeWeather.sh", NULL };
++#endif
++
+ static Key keys[] = {
+-	/* modifier                     key        function        argument */
+-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+-	{ MODKEY,                       XK_b,      togglebar,      {0} },
+-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+-	{ MODKEY,                       XK_Return, zoom,           {0} },
+-	{ MODKEY,                       XK_Tab,    view,           {0} },
+-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+-	{ MODKEY,                       XK_space,  setlayout,      {0} },
+-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
+-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
+-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
+-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+-	TAGKEYS(                        XK_1,                      0)
+-	TAGKEYS(                        XK_2,                      1)
+-	TAGKEYS(                        XK_3,                      2)
+-	TAGKEYS(                        XK_4,                      3)
+-	TAGKEYS(                        XK_5,                      4)
+-	TAGKEYS(                        XK_6,                      5)
+-	TAGKEYS(                        XK_7,                      6)
+-	TAGKEYS(                        XK_8,                      7)
+-	TAGKEYS(                        XK_9,                      8)
+-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
++	/* modifier                     key        	function        argument */
++	#ifdef PERSONAL
++	{ MODKEY,                       XK_F2,     	spawn,          {.v = roficmd } },
++	{ MODKEY,                       XK_F3,     	spawn,          {.v = roficmdtasks } },
++	{ MODKEY,                       XK_F4,     	spawn,          {.v = dmenucmd } },
++	{ MODKEY,                       XK_F5,     	spawn,          SHCMD("dmenuunicode") },
++	{ 0,              XF86XK_AudioRaiseVolume, 	spawn,          {.v = upvol } },
++        { 0,              XF86XK_AudioLowerVolume, 	spawn,          {.v = downvol } },
++	{ 0,              XF86XK_Forward,  		spawn,          {.v = cmusstop } },
++	{ 0,              XF86XK_Back,       		spawn,   	{.v = cmusstart } },
++	{ 0,              XF86XK_Calculator, 		spawn,          {.v = downvol } },
++        { 0,              XF86XK_Sleep, 		spawn,          {.v = upvol } },
++	{ 0,              XF86XK_AudioMedia,       	spawn,          {.v = kodi } },
++	{ 0,              XF86XK_Mail,             	spawn,          {.v = showDateTimeWeather } },
++	{ 0,              XF86XK_HomePage,         	spawn,          {.v = firefox } },
++	{ 0,              XF86XK_MyComputer,         	fullscreenmode, {0} },
++	{ 0,              XF86XK_AudioRecord,         	fullscreenmode, {0} },
++	{ 0,                            XK_Print,  	spawn,          {.v = screenshotfull } },
++	{ MODKEY,                       XK_Print,  	spawn,          {.v = screenshotgrab } },
++	{ MODKEY|ControlMask|ShiftMask, XK_r,      	spawn,          {.v = reboot } },
++	#else
++	{ MODKEY,                       XK_p,      	spawn,          {.v = dmenucmd } },
++	#endif
++	{ MODKEY,             		XK_Return, 	spawn,          {.v = termcmd } },
++	{ MODKEY,                       XK_b,      	togglebar,      {0} },
++	{ MODKEY,                       XK_j,      	focusstack,     {.i = +1 } },
++	{ MODKEY,                       XK_k,      	focusstack,     {.i = -1 } },
++	{ MODKEY,                       XK_i,      	incnmaster,     {.i = +1 } },
++	{ MODKEY,                       XK_d,      	incnmaster,     {.i = -1 } },
++	{ MODKEY,                       XK_h,      	setmfact,       {.f = -0.05} },
++	{ MODKEY,                       XK_l,      	setmfact,       {.f = +0.05} },
++	#ifdef VANITYGAPS
++	{ MODKEY|Mod4Mask,              XK_h,      	incrgaps,       {.i = +1 } },
++	{ MODKEY|Mod4Mask,              XK_l,      	incrgaps,       {.i = -1 } },
++	{ MODKEY|Mod4Mask|ShiftMask,    XK_h,      	incrogaps,      {.i = +1 } },
++	{ MODKEY|Mod4Mask|ShiftMask,    XK_l,      	incrogaps,      {.i = -1 } },
++	{ MODKEY|Mod4Mask|ControlMask,  XK_h,      	incrigaps,      {.i = +1 } },
++	{ MODKEY|Mod4Mask|ControlMask,  XK_l,      	incrigaps,      {.i = -1 } },
++	{ MODKEY|Mod4Mask,              XK_0,      	togglegaps,     {0} },
++	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,      	defaultgaps,    {0} },
++	{ MODKEY,                       XK_y,      	incrihgaps,     {.i = +1 } },
++	{ MODKEY,                       XK_o,      	incrihgaps,     {.i = -1 } },
++	{ MODKEY|ControlMask,           XK_y,      	incrivgaps,     {.i = +1 } },
++	{ MODKEY|ControlMask,           XK_o,      	incrivgaps,     {.i = -1 } },
++	{ MODKEY|Mod4Mask,              XK_y,      	incrohgaps,     {.i = +1 } },
++	{ MODKEY|Mod4Mask,              XK_o,      	incrohgaps,     {.i = -1 } },
++	{ MODKEY|ShiftMask,             XK_y,      	incrovgaps,     {.i = +1 } },
++	{ MODKEY|ShiftMask,             XK_o,      	incrovgaps,     {.i = -1 } },
++	#endif
++	{ MODKEY,                       XK_space,  	zoom,           {0} },
++	{ MODKEY,                       XK_Tab,    	view,           {0} },
++	{ MODKEY,             		XK_q,      	killclient,     {0} },
++	{ MODKEY,                       XK_t,      	setlayout,      {.v = &layouts[0]} },
++	{ MODKEY,                       XK_f,      	setlayout,      {.v = &layouts[1]} },
++	{ MODKEY,                       XK_m,      	setlayout,      {.v = &layouts[2]} },
++	{ MODKEY|ShiftMask,             XK_Return, 	setlayout,      {0} },
++	{ MODKEY|ShiftMask,             XK_space,  	togglefloating, {0} },
++	{ MODKEY,                       XK_comma,  	focusmon,       {.i = -1 } },
++	{ MODKEY,                       XK_period, 	focusmon,       {.i = +1 } },
++	{ MODKEY|ShiftMask,             XK_comma,  	tagmon,         {.i = -1 } },
++	{ MODKEY|ShiftMask,             XK_period, 	tagmon,         {.i = +1 } },
++	TAGKEYS(                        XK_1,                      	0)
++	TAGKEYS(                        XK_2,                      	1)
++	TAGKEYS(                        XK_3,                      	2)
++	TAGKEYS(                        XK_4,                      	3)
++	TAGKEYS(                        XK_5,                      	4)
++	TAGKEYS(                        XK_6,                      	5)
++	TAGKEYS(                        XK_7,                      	6)
++	TAGKEYS(                        XK_8,                      	7)
++	TAGKEYS(                        XK_9,                      	8)
++	#ifdef RESTARTSIG
++	{ MODKEY|ControlMask|ShiftMask, XK_q,           quit,           {0} }, // QUIT TO TTY
++	{ MODKEY|ControlMask|ShiftMask, XK_F5,      	quit,           {1} }, // RESTART DWM
++	#else
++	{ MODKEY|ShiftMask,             XK_q,      	quit,           {0} },
++	#endif
+ };
+ 
+ /* button definitions */
+ /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+ static Button buttons[] = {
+ 	/* click                event mask      button          function        argument */
++	#ifdef PERSONAL
++	{ ClkCmusButton,	0,		Button1,	spawn,		{.v = cmusstart } },
++	{ ClkCmusButton,	0,		Button3,	spawn,		{.v = cmusstop } },
++	#else
+ 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+ 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
++	#endif
+ 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+ 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+ 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+ 	{ ClkTagBar,            0,              Button1,        view,           {0} },
+-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
+ 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+ };
+ 

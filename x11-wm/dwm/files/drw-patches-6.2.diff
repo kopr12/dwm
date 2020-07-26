@@ -1,0 +1,103 @@
+--- a/drw.h	2019-02-02 13:55:28.000000000 +0100
++++ b/drw.h	2020-07-25 23:32:42.752674056 +0200
+@@ -50,6 +50,10 @@
+ void drw_setscheme(Drw *drw, Clr *scm);
+ 
+ /* Drawing functions */
++#ifdef PERSONAL
++int drw_get_width(Drw *drw, int numcolors, const char *text);
++void drw_colored_text(Drw *drw, Clr **scheme, int numcolors, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, char *text);
++#endif
+ void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert);
+ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert);
+ 
+
+--- a/drw.c	2019-02-02 13:55:28.000000000 +0100
++++ b/drw.c	2020-07-25 23:32:42.752674056 +0200
+@@ -202,6 +202,10 @@
+ 	                       DefaultColormap(drw->dpy, drw->screen),
+ 	                       clrname, dest))
+ 		die("error, cannot allocate color '%s'", clrname);
++	
++	#ifdef ALPHABORDER
++	dest->pixel |= 0xff << 24;
++	#endif
+ }
+ 
+ /* Wrapper to create color schemes. The caller has to call free(3) on the
+@@ -235,6 +239,54 @@
+ 		drw->scheme = scm;
+ }
+ 
++#ifdef PERSONAL
++int
++drw_get_width(Drw *drw, int numcolors, const char *text)
++{
++	int i;
++	Fnt *curfont = drw->fonts;
++	int w = drw_text(drw, 0, 0, 0, 0, 0, text, 0);
++	unsigned int ew = 0;
++
++	drw_font_getexts(curfont, "\x01", 1,  &ew, NULL);
++
++	for (i = 0; i < strlen(text); i++) {
++		if (text[i] > 0 && text[i] <= numcolors) {
++			/* we found a color code
++			 * drw_text counted it as a normal character and added one character's width
++			 * we aren't going to render this character, so we remove one character's width */
++			w -= ew;
++
++		}
++	}
++	return w;
++}
++
++void
++drw_colored_text(Drw *drw, Clr **scheme, int numcolors, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, char *text)
++{
++	if (!drw || !drw->fonts || !drw->scheme)
++		return;
++
++	char *buf = text, *ptr = buf, c = 1;
++	int i;
++
++	while (*ptr) {
++		for (i = 0; *ptr < 0 || *ptr > numcolors; i++, ptr++);
++		if (!*ptr)
++			break;
++		c = *ptr;
++		*ptr = 0;
++		if (i)
++			x = drw_text(drw, x, y, w, h, lpad, buf, 0);
++		*ptr = c;
++		drw_setscheme(drw, scheme[c-1]);
++		buf = ++ptr;
++	}
++	drw_text(drw, x, y, w, h, lpad, buf, 0);
++}
++#endif
++
+ void
+ drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert)
+ {
+@@ -252,7 +304,7 @@
+ {
+ 	char buf[1024];
+ 	int ty;
+-	unsigned int ew;
++	unsigned int ew = 0;
+ 	XftDraw *d = NULL;
+ 	Fnt *usedfont, *curfont, *nextfont;
+ 	size_t i, len;
+@@ -375,7 +427,11 @@
+ 	if (d)
+ 		XftDrawDestroy(d);
+ 
++	#ifdef PERSONAL
++	return x;
++	#else
+ 	return x + (render ? w : 0);
++	#endif
+ }
+ 
+ void
