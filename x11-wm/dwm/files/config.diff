@@ -1,6 +1,6 @@
---- a/config.def.h	2020-07-25 23:32:42.751674025 +0200
-+++ b/config.def.h	2020-07-26 15:16:58.891432802 +0200
-@@ -1,26 +1,128 @@
+--- a/config.def.h	2019-02-02 13:55:28.000000000 +0100
++++ b/config.def.h	2020-08-05 14:32:05.986534930 +0200
+@@ -1,26 +1,135 @@
 +#ifdef PERSONAL
 +#include <X11/XF86keysym.h>
 +#endif
@@ -29,6 +29,13 @@
 +static const unsigned int systrayspacing = 2;   /* systray spacing */
 +static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 +static const int showsystray        = 1;     /* 0 means no systray */
++#endif
++#if defined(PERSONAL) && defined(BARPADDING)
++static const int vertpad            = 10;       /* vertical padding of bar */
++static const int sidepad            = 80;       /* horizontal padding of bar */
++#elif defined(BARPADDING)
++static const int vertpad            = 10;       /* vertical padding of bar */
++static const int sidepad            = 10;       /* horizontal padding of bar */
 +#endif
  static const int showbar            = 1;        /* 0 means no bar */
  static const int topbar             = 1;        /* 0 means bottom bar */
@@ -130,7 +137,7 @@
  static const Rule rules[] = {
  	/* xprop(1):
  	 *	WM_CLASS(STRING) = instance, class
-@@ -30,9 +132,14 @@
+@@ -30,9 +139,14 @@
  	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
  	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
  };
@@ -145,7 +152,7 @@
  static const int nmaster     = 1;    /* number of clients in master area */
  static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
  
-@@ -44,7 +151,7 @@
+@@ -44,7 +158,7 @@
  };
  
  /* key definitions */
@@ -154,7 +161,7 @@
  #define TAGKEYS(KEY,TAG) \
  	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
  	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-@@ -56,60 +163,118 @@
+@@ -56,60 +170,118 @@
  
  /* commands */
  static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */

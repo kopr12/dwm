@@ -13,6 +13,7 @@ Feel free to add more via PR or ask for the ones you would like to see
 
 * alphaborder
 * attachaside
+* barpadding
 * center
 * hidevcacanttags
 * pertag
