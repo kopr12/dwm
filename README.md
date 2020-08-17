@@ -15,6 +15,7 @@ Feel free to add more via PR or ask for the ones you would like to see
 * attachaside
 * barpadding
 * center
+* emojis
 * hidevcacanttags
 * pertag
 * restartsig
@@ -29,6 +30,10 @@ Copy `x11-wm/dwm` directory in your local overlay and emerge `dwm`
 if you already used dwm before with `savedconfig` USE flag enabled,   
 you will need to backup that config file and delete it, in order for new config to be used.   
 
+# Emojis
+
+You will need patched libXft in order for dwm to display colored emojis   
+Patch is located in libXft dir, place the file in /etc/portage/patches/x11-libs/libXft and re-emerge libXft and dwm   
 
 
 

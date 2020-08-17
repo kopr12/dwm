@@ -6,6 +6,7 @@
 	<flag name="attachaside">Make new clients get attached and focused in the stacking area instead of always becoming the new master</flag>
 	<flag name="barpadding">This patch adds variables for verticle and horizontal space between the statusbar and the edge of the screen</flag>
 	<flag name="center">Add an iscentered rule to automatically center clients on the current monitor</flag>
+	<flag name="emojis">Enable color emojis, patched libXft is needed</flag>
 	<flag name="hidevacanttags">This patch prevents dwm from drawing tags with no clients (i.e. vacant) on the bar</flag>
 	<flag name="personal">Some tweaks (colorschemes, bar colored output support, fullscreen mode)</flag>
 	<flag name="pertag">This patch keeps layout, mwfact, barpos and nmaster per tag</flag>

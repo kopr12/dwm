@@ -11,7 +11,7 @@ SRC_URI="https://dl.suckless.org/${PN}/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64 ~arm ppc ~ppc64 x86"
-IUSE="attachaside alphaborder barpadding center hidevacanttags pertag personal restartsig roundedcorners systray vanitygaps xinerama"
+IUSE="attachaside alphaborder barpadding center emojis hidevacanttags pertag personal restartsig roundedcorners systray vanitygaps xinerama"
 
 RDEPEND="
 	media-libs/fontconfig
@@ -60,6 +60,11 @@ src_prepare() {
 		sed -i -e 's/CENTERFLAGS =.*/CENTERFLAGS = -DCENTER/g' config.mk || die
 	else
 		sed -i -e 's/CENTERFLAGS =.*/CENTERFLAGS = /g' config.mk || die
+	fi
+	if use emojis; then
+		sed -i -e 's/EMOJISFLAGS =.*/EMOJISFLAGS = -DEMOJIS/g' config.mk || die
+	else
+		sed -i -e 's/EMOJISFLAGS =.*/EMOJISFLAGS = /g' config.mk || die
 	fi
 	if use hidevacanttags; then
 		sed -i -e 's/HIDEVACANTTAGSFLAGS =.*/HIDEVACANTTAGSFLAGS = -DHIDEVACANTTAGS/g' config.mk || die
