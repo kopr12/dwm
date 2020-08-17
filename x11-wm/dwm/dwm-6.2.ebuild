@@ -21,10 +21,11 @@ RDEPEND="
 "
 DEPEND="
 	${RDEPEND}
-	roundedcorners? ( x11-libs/libXext
-					  x11-libs/libxcb
-	xinerama? ( x11-base/xorg-proto )
+	roundedcorners? (
+		x11-libs/libXext
+		x11-libs/libxcb
 	)
+	xinerama? ( x11-base/xorg-proto )
 "
 
 src_prepare() {
