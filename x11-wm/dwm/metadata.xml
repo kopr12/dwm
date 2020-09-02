@@ -2,7 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 <use>
-    <flag name="alphaborder">Make borders opaque</flag>
+	<flag name="alphaborder">Make borders opaque</flag>
 	<flag name="attachaside">Make new clients get attached and focused in the stacking area instead of always becoming the new master</flag>
 	<flag name="barpadding">This patch adds variables for verticle and horizontal space between the statusbar and the edge of the screen</flag>
 	<flag name="center">Add an iscentered rule to automatically center clients on the current monitor</flag>
@@ -14,7 +14,7 @@
 	<flag name="roundedcorners">Enable rounded corners on windows</flag>
 	<flag name="systray">A simple system tray implementation</flag>
 	<flag name="vanitygaps">This patch adds (inner) gaps between client windows and (outer) gaps between windows and the screen edge in a flexible manner</flag>
-  </use>
+</use>
 <maintainer type="project">
 	<email>desktop-misc@gentoo.org</email>
 </maintainer>
